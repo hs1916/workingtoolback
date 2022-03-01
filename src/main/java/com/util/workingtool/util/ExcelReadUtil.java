@@ -1,8 +1,15 @@
 package com.util.workingtool.util;
 
+import com.util.workingtool.domain.ColumnList;
+import com.util.workingtool.service.MetaService;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,22 +24,21 @@ import java.util.Map;
 /**
  * POI lIB
  */
+@Controller
+@RequiredArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class ExcelReadUtil {
 
-    public static void main(String[] args) {
-        String path = "./src/main/resources/upload/";
-        String fileName = "test.xlsx";
+    private final MetaService metaService;
+    private String tableName;
 
-        List<Map<Object, Object>> excelData = readExcel(path, fileName);
 
-        for (int i = 0; i < excelData.size(); i++) {
-            System.out.println(excelData.get(i));
-        }
-    }
-
-    public static List<Map<Object, Object>> readExcel(String path, String fileName) {
+    public List<Map<Object, Object>> readExcel(String path, String fileName, String tableName) {
 
         List<Map<Object, Object>> list = new ArrayList<>();
+        this.setTableName(tableName);
 
         if(path == null || fileName == null){
             return list;
@@ -72,7 +78,7 @@ public class ExcelReadUtil {
         return list;
     }
 
-    public static void getSheet(Workbook workbook, int sheets, List<Map<Object, Object>> list){
+    public void getSheet(Workbook workbook, int sheets, List<Map<Object, Object>> list){
         for (int z = 0; z < sheets; z++ ){
             Sheet sheet = workbook.getSheetAt(z);
             int rows = sheet.getLastRowNum();
@@ -80,7 +86,7 @@ public class ExcelReadUtil {
         }
     }
 
-    public static void getRow(Sheet sheet, int rows, List<Map<Object, Object>> list) {
+    public void getRow(Sheet sheet, int rows, List<Map<Object, Object>> list) {
         for (int i = 0; i <= rows; i++ ){
             Row row = sheet.getRow(i);
             if (row != null) {
@@ -91,37 +97,42 @@ public class ExcelReadUtil {
     }
 
 
-    public static Map<Object, Object> getCell(Row row, int cells) {
-        String[] columns = {"col1","col2","col3","col4","col5"};
+    public Map<Object, Object> getCell(Row row, int cells) {
+        List<ColumnList> colList = metaService.getColList(getTableName());
+
+        for (int i = 0; i < colList.size(); i++) {
+            log.debug("col {} - {} ", i, colList.get(i).getColumnName());
+        }
+
         Map<Object, Object> map = new HashMap<>();
         for( int j = 0; j< cells; j++) {
-            if (j >= columns.length){
+            if (j >= colList.size()){
                 break;
             }
             Cell cell = row.getCell(j);
             if (cell != null) {
                 switch (cell.getCellType()) {
                     case BLANK:
-                        map.put(columns[j], "");
+                        map.put( colList.get(j).getColumnName(), "");
                         break;
                     case STRING:
-                        map.put(columns[j], cell.getStringCellValue());
+                        map.put( colList.get(j).getColumnName(), cell.getStringCellValue());
                         break;
                     case NUMERIC:
                         if (DateUtil.isCellDateFormatted(cell)) {
-                            map.put(columns[j], cell.getDateCellValue());
+                            map.put( colList.get(j).getColumnName(), cell.getDateCellValue());
                         } else {
-                            map.put(columns[j], cell.getNumericCellValue());
+                            map.put( colList.get(j).getColumnName(), cell.getNumericCellValue());
                         }
                         break;
                     case ERROR:
-                        map.put(columns[j], cell.getErrorCellValue());
+                        map.put( colList.get(j).getColumnName(), cell.getErrorCellValue());
                         break;
                     case FORMULA:
-                        map.put(columns[j], cell.getCellFormula());
+                        map.put( colList.get(j).getColumnName(), cell.getCellFormula());
                         break;
                     default:
-                        map.put(columns[j], "");
+                        map.put( colList.get(j).getColumnName(), "");
                         break;
                 }
             }

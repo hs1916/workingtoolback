@@ -3,6 +3,9 @@ logging:
     root: debug
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   session:
     store-type: jdbc
     jdbc.initialize-schema: always
@@ -17,12 +20,22 @@ spring:
     username: root
     password: 12345678
   jpa:
-    show-sql: true
+#    hibernate:
+#      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
+        show-sql: true
+        foramt_sql: true
+#  resources:
+#    static-locations: classpath:/webapp/
 
+jwt:
+  header: Authorization
+  secret: c2V1bmdoZWUtaGVlY2hhbi1tYXJyaWVkLWF0LTIwMTktMTAtMTktdGhpc3Byb2dyYW0tcHVycG9zZS1oZWxwZWQtc2V1bmdoZWUtZWFzeS10by13b3JrLWF0LWtibGlmZS1tYWRlLWJ5LWhlZS1jaGFuCg==
+  token-validity-in-seconds: 86400
 
 file:
   upload-path: /Users/heechanshin/springBoot/workingtool/src/main/resources/upload/
-
+meta:
+  default-schema: upload
