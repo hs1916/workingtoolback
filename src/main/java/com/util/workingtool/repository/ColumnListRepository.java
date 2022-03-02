@@ -1,5 +1,6 @@
-package com.util.workingtool.domain;
+package com.util.workingtool.repository;
 
+import com.util.workingtool.entity.ColumnList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

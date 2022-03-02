@@ -40,10 +40,5 @@ public class AuthController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
         return new ResponseEntity<>(new TokenDTO(jwt), httpHeaders, HttpStatus.OK);
-
-
     }
-
-
-
 }

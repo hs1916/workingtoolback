@@ -1,4 +1,4 @@
-package com.util.workingtool.domain;
+package com.util.workingtool.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

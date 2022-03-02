@@ -1,8 +1,8 @@
 package com.util.workingtool.config;
 
-import com.util.workingtool.domain.ColumnList;
-import com.util.workingtool.domain.ColumnListRepository;
-import com.util.workingtool.domain.Sample1;
+import com.util.workingtool.entity.ColumnList;
+import com.util.workingtool.repository.ColumnListRepository;
+import com.util.workingtool.entity.Sample1;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

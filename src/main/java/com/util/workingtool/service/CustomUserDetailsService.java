@@ -1,11 +1,10 @@
 package com.util.workingtool.service;
 
 
-import com.util.workingtool.domain.UserRepository;
+import com.util.workingtool.repository.UserRepository;
 import com.util.workingtool.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

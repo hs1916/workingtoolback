@@ -1,7 +1,7 @@
 package com.util.workingtool.service;
 
 
-import com.util.workingtool.domain.UserRepository;
+import com.util.workingtool.repository.UserRepository;
 import com.util.workingtool.dto.UserDTO;
 import com.util.workingtool.entity.Authority;
 import com.util.workingtool.entity.User;

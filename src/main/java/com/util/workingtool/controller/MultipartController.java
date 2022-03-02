@@ -32,12 +32,16 @@ public class MultipartController {
     public ResponseEntity<Object> uploadFiles(@RequestPart(value = "multipartFiles")  MultipartFile[] multipartFiles,
                                               @RequestPart(value = "tableName") String tableName) throws JsonProcessingException {
 
-        List<Map<Object, Object>> list = excelService.uploadData(multipartFiles, UPLOAD_PATH, tableName);
+        try {
+            List<Map<Object, Object>> list = excelService.uploadData(multipartFiles, UPLOAD_PATH, tableName);
+            ResponseDTO<Map<Object, Object>> response = ResponseDTO.<Map<Object, Object>>builder().data(list).build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            String error = e.getMessage();
+            ResponseDTO<Map<Object, Object>> response = ResponseDTO.<Map<Object, Object>>builder().error(error).build();
+            return ResponseEntity.badRequest().body(response);
+        }
 
-//        return ResponseEntity.ok().body(list);
-
-        ResponseDTO<Map<Object, Object>> response = ResponseDTO.<Map<Object, Object>>builder().data(list).build();
-        return ResponseEntity.ok().body(response);
 
     }
 }

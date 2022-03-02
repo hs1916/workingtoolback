@@ -36,6 +36,7 @@ dependencies {
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 //	implementation group: 'org.springframework.security', name: 'spring-security-config', version: '5.6.1'
 
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	testImplementation 'org.springframework.security:spring-security-test'
 
@@ -47,6 +48,6 @@ dependencies {
 
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}

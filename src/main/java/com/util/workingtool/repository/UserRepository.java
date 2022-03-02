@@ -1,4 +1,4 @@
-package com.util.workingtool.domain;
+package com.util.workingtool.repository;
 
 import com.util.workingtool.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;

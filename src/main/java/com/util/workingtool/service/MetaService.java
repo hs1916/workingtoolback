@@ -1,10 +1,10 @@
 package com.util.workingtool.service;
 
 
-import com.util.workingtool.domain.ColumnList;
-import com.util.workingtool.domain.ColumnListRepository;
-import com.util.workingtool.domain.TableList;
-import com.util.workingtool.domain.TableListRepository;
+import com.util.workingtool.entity.ColumnList;
+import com.util.workingtool.repository.ColumnListRepository;
+import com.util.workingtool.entity.TableList;
+import com.util.workingtool.repository.TableListRepository;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;

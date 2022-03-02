@@ -22,9 +22,6 @@ public class UploadUtil {
 
 
         try {
-            // 객체는 client에서 직렬화를 하여 전달
-//            FoodDto foodDto = new ObjectMapper().readValue(stringFoodDto, FoodDto.class); // String to Object
-//            System.out.println("foodDto= " + foodDto);
 
             for(int i=0; i<multipartFiles.length; i++) {
                 MultipartFile file = multipartFiles[i];
@@ -36,7 +33,6 @@ public class UploadUtil {
 
                 fileInfo.put("originName", originName);
                 fileInfo.put("fileExtension", fileExtension);
-//                fileInfo.put("UPLOAD_PATH", UPLOAD_PATH);
 
                 long fileSize = file.getSize(); // 파일 사이즈
 
@@ -56,7 +52,6 @@ public class UploadUtil {
             e.printStackTrace();
             return null;
         }
-
         return fileInfo;
     }
 }

@@ -2,7 +2,7 @@ package com.util.workingtool.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.util.workingtool.config.JdbcTemplateConfig;
-import com.util.workingtool.domain.Sample1Repository;
+import com.util.workingtool.repository.Sample1Repository;
 import com.util.workingtool.util.ExcelReadUtil;
 import com.util.workingtool.util.UploadUtil;
 import lombok.RequiredArgsConstructor;

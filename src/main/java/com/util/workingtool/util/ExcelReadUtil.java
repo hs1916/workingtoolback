@@ -1,6 +1,6 @@
 package com.util.workingtool.util;
 
-import com.util.workingtool.domain.ColumnList;
+import com.util.workingtool.entity.ColumnList;
 import com.util.workingtool.service.MetaService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,13 @@ public class ExcelReadUtil {
     private final MetaService metaService;
     private String tableName;
 
-
+    /**
+     * Excel 파일 Read
+     * @param path 파일 경로
+     * @param fileName 파일명
+     * @param tableName 업로드 파일 대상명 (엑셀 파일이 업로드 하고자 하는 테이블 메타와 일치하게 하고자 함)
+     * @return 조회된 엑셀 파일 결과
+     */
     public List<Map<Object, Object>> readExcel(String path, String fileName, String tableName) {
 
         List<Map<Object, Object>> list = new ArrayList<>();
