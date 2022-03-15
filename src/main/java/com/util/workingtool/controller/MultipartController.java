@@ -5,11 +5,9 @@ package com.util.workingtool.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.util.workingtool.dto.ResponseDTO;
 import com.util.workingtool.service.ExcelService;
-import com.util.workingtool.util.UploadUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +31,9 @@ public class MultipartController {
                                               @RequestPart(value = "tableName") String tableName) throws JsonProcessingException {
 
         try {
-            List<Map<Object, Object>> list = excelService.uploadData(multipartFiles, UPLOAD_PATH, tableName);
-            ResponseDTO<Map<Object, Object>> response = ResponseDTO.<Map<Object, Object>>builder().data(list).build();
+            List<Map<String, String>> list = excelService.uploadData(multipartFiles, UPLOAD_PATH, tableName);
+            ResponseDTO<Map<String, String>> response = ResponseDTO.<Map<String, String>>builder().data(list).build();
+//            ResponseDTO<Map<Object, Object>> response = null;
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             String error = e.getMessage();

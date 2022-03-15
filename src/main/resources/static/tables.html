@@ -95,13 +95,13 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="loginUserName">Douglas McGee</span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <!-- <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -113,7 +113,7 @@
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>
-                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-divider"></div> -->
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -131,6 +131,8 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+
+                    <input type="text" id="selectedTable" hidden>
 
                     <nav class="navbar navbar-expand navbar-light bg-light mb-4">
                         <a class="navbar-brand" href="#">
@@ -245,33 +247,51 @@
 
     <script src="js/bs-custom-file-input.js"></script>
 
+    <!-- custom javascript function -->
+    <script src="js/api-use.js"></script>
+
     <script>
         let fileList = [];
         let strText;
 
 
         $(document).ready(function () {
+
+            // loginUserName
+            $.ajax({
+                url: 'api/user',
+                method: 'GET'
+            })
+            .done(function (json) {
+                $("#loginUserName").empty();
+                $("#loginUserName").text(json.username);
+            })
+
             $("#footer").load("footer.html");
 
             $.ajax({
-                url: 'meta/table/list',
+                url: 'api/table/list',
                 method: 'GET',
                 dataType: 'json'
             })
-                .done(function (json) {
-                    $.each(json, function (index, tableJson) {
-                        let name = tableJson['tableName'];
-                        let item = `<a class="dropdown-item" href="javascript:void(0)" onclick="select(this)">${name}</a>`;
-                        $("#tableDropDownList").append(item);
-                    })
-                    console.log(json);
+            .done(function (json) {
+                $.each(json, function (index, tableJson) {
+                    let name = tableJson['tableName'];
+                    let item = `<a class="dropdown-item" href="javascript:void(0)" onclick="select(this, 'selectedTable')">${name}</a>`;
+                    $("#tableDropDownList").append(item);
                 })
+                console.log(json);
+            })
+                
 
-            $('input[type="file"]').on("change", function () {
+
+            $('input[type="file"]').on("change", function (e) {
                 let filenames = [];
                 fileList = [];
 
-                let files = Array.prototype.slice.call(this.files);
+                console.log(e);
+
+                let files = Array.prototype.slice.call(e.currentTarget.files);
 
                 files.forEach((uploadFile) => {
                     if (uploadFile) {
@@ -279,14 +299,24 @@
                     }
                     fileList.push(uploadFile);
                 });
-                $(this)
+                $(e.currentTarget)
                     .next(".custom-file-label")
                     .html(filenames.join(","));
+
             });
 
+
             $('#inputGroupFileAddon').on("click", function () {
-                console.log('upload button clicked');
-                console.log(fileList);
+                let selectedTable = $("#selectedTable").val();
+                if ( !selectedTable ) {
+                    $("#uploadResult").html(composeAlert('warning', '파일업로드 경고', '테이블이 선택되지 않았습니다'));
+                    return false; 
+                }
+                if (fileList.length == 0) {
+                    $("#uploadResult").html(composeAlert('warning', '파일업로드 경고', '파일을 선택하지 않았습니다'));
+                    return false; 
+                }
+
 
                 const formData = new FormData();
                 fileList.forEach((file) => {
@@ -295,9 +325,7 @@
                     formData.append('multipartFiles', file);
                 });
 
-                formData.append('tableName', strText);
-                console.log('tableName:', formData.get('tableName'));
-                console.log('FormData : ', formData);
+                formData.append('tableName', selectedTable);
 
                 $.ajax({
                     url: 'file/upload',
@@ -319,75 +347,6 @@
 
 
         });
-
-
-        function makeTable(json, divId, tableName) {
-            console.log(json);
-            $('#' + divId).empty();
-
-            let row = '<tbody>';
-            $.each(json, function (idx, e) {
-                row = row + '<tr>';
-
-                if (idx === 0) {
-                    let key = Object.keys(e);
-                    let header = '<thead><tr>'
-                    $.each(key, function (j, val) {
-                        header = header + '<th>' + val + '</th>';
-                    })
-                    header = header + '</tr></thead>'
-                    $('#' + divId).append(header);
-                }
-
-                $.each(e, function (i, value) {
-                    row = row + '<td>' + value + '</td>';
-                })
-                row = row + '</tr>'
-                // $('#'+divId).append(row);
-            });
-            row = row + '</tbody>';
-            // $('#dataTable').DataTable();
-
-            $('#' + divId).append(row);
-            $('#' + divId).DataTable({
-                destroy: true
-            });
-
-            $('#displayTableName').text(tableName + ' Meta 정보');
-        }
-
-        function select(selectTag) {
-            strText = null;
-            strText = $(selectTag).text();
-            console.log(strText);
-
-            $.ajax({
-                url: 'meta/col/list',
-                data: {
-                    tableName: strText
-                },
-                method: 'GET',
-                dataType: 'json'
-            })
-                .done(function (json) {
-                    makeTable(json, 'dataTable', strText);
-                })
-        }
-
-        function composeAlert(result, msg, msgDetail) {
-            console.log(result + ' / ' + msg + ' / ' + msgDetail );
-            let composedAlertTag = `
-                    <div class="alert alert-${result} alert-dismissible fade show" role="alert">
-                        <strong>${msg}</strong> ${msgDetail}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                `
-            console.log(composedAlertTag);
-            return composedAlertTag;
-        }
-
 
     </script>
 

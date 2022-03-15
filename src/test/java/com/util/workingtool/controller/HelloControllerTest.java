@@ -32,10 +32,8 @@ public class HelloControllerTest {
 
         String hello = "hello";
 
-
         //when
         String body = this.restTemplate.getForObject("/api/hello", String.class);
-
 
         assertThat(body).isEqualTo(hello);
 

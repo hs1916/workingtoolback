@@ -23,13 +23,6 @@ public class UserController {
         return ResponseEntity.ok(userService.signup(userDto));
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<UserDTO> signin(
-            @Valid @RequestBody UserDTO userDto
-    ) {
-        return ResponseEntity.ok(userService.signup(userDto));
-    }
-
     @GetMapping("/user")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<UserDTO> getMyUserInfo(HttpServletRequest request) {

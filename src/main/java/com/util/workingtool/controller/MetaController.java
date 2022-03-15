@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/meta")
+@RequestMapping("/api")
 public class MetaController {
 
     private final MetaService metaService;
@@ -21,8 +21,8 @@ public class MetaController {
         return ResponseEntity.ok().body(metaService.getTableList());
     }
 
-    @GetMapping("/col/list")
-    public ResponseEntity<?> getColumnList(@RequestParam String tableName){
+    @GetMapping("/col/list/{tableName}")
+    public ResponseEntity<?> getColumnList(@PathVariable("tableName") String tableName){
         return ResponseEntity.ok().body(metaService.getColList(tableName));
     }
 }

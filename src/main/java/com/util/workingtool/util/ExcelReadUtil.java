@@ -33,6 +33,9 @@ public class ExcelReadUtil {
 
     private final MetaService metaService;
     private String tableName;
+    private List<ColumnList> tableColList;
+
+
 
     /**
      * Excel 파일 Read
@@ -44,7 +47,9 @@ public class ExcelReadUtil {
     public List<Map<Object, Object>> readExcel(String path, String fileName, String tableName) {
 
         List<Map<Object, Object>> list = new ArrayList<>();
-        this.setTableName(tableName);
+        setTableName(tableName);
+        setTableColList(metaService.getColList(tableName));
+
 
         if(path == null || fileName == null){
             return list;
@@ -93,7 +98,7 @@ public class ExcelReadUtil {
     }
 
     public void getRow(Sheet sheet, int rows, List<Map<Object, Object>> list) {
-        for (int i = 0; i <= rows; i++ ){
+        for (int i = 1; i <= rows; i++ ){
             Row row = sheet.getRow(i);
             if (row != null) {
                 int cells = row.getPhysicalNumberOfCells();
@@ -104,11 +109,11 @@ public class ExcelReadUtil {
 
 
     public Map<Object, Object> getCell(Row row, int cells) {
-        List<ColumnList> colList = metaService.getColList(getTableName());
+        List<ColumnList> colList = getTableColList();
 
-        for (int i = 0; i < colList.size(); i++) {
-            log.debug("col {} - {} ", i, colList.get(i).getColumnName());
-        }
+//        for (int i = 0; i < colList.size(); i++) {
+//            log.debug("col {} - {} ", i, colList.get(i).getColumnName());
+//        }
 
         Map<Object, Object> map = new HashMap<>();
         for( int j = 0; j< cells; j++) {

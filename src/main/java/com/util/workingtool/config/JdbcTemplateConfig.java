@@ -102,26 +102,74 @@ public class JdbcTemplateConfig {
         return stmt + afterStmt;
     }
 
-    public int[] batchInsert(List<Map<Object, Object>> uploadList, String tableName) {
+//    public int[] batchInsert(List<Map<Object, Object>> uploadList, String tableName) {
+//        List<ColumnList> result = columnListRepository.findBySchemaAndTable(DEFAULT_SCHEMA, tableName);
+//        String query = makeInserQuery(tableName, result);
+//
+//        return jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
+//            @Override
+//            public void setValues(PreparedStatement ps, int i) throws SQLException {
+//                Map<Object, Object> uploadData = uploadList.get(i);
+//                for (int j = 0; j < result.size(); j++) {
+//                     switch (result.get(j).getDataType()) {
+//                        case "varchar" :
+//                            ps.setString(j+1, (String) uploadData.get(result.get(j).getColumnName()));
+//                            break;
+//                        case "int":
+////
+//////                            Integer.parsInt(String.valueof("변환 값"));
+////
+////                            ps.setInt(j+1, Integer.parseInt((String) uploadData.get(result.get(j).getColumnName())));
+//////                            ps.setInt(j+1, (Integer) uploadData.get(result.get(j).getColumnName()));
+////                            break;
+//                        case "double" :
+//                            log.debug("Double Casting : {}", (Double) uploadData.get(result.get(j).getColumnName()));
+//                            ps.setDouble(j+1, (Double) uploadData.get(result.get(j).getColumnName()));
+//
+////                            ps.setDouble(j+1, Double.parseDouble((String) uploadData.get(result.get(j).getColumnName()))  );
+//                            break;
+//                        default:
+//                            ps.setString(j+1, (String) uploadData.get(result.get(j).getColumnName()));
+//                            break;
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public int getBatchSize() {
+//                return uploadList.size();
+//            }
+//        });
+//    }
+
+    public int[] batchInsert(List<Map<String, String>> uploadList, String tableName) {
         List<ColumnList> result = columnListRepository.findBySchemaAndTable(DEFAULT_SCHEMA, tableName);
         String query = makeInserQuery(tableName, result);
 
         return jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                Map<Object, Object> uploadData = uploadList.get(i);
+                Map<String, String> uploadData = uploadList.get(i);
                 for (int j = 0; j < result.size(); j++) {
-                     switch (result.get(j).getDataType()) {
+                    switch (result.get(j).getDataType()) {
                         case "varchar" :
-                            ps.setString(j+1, (String) uploadData.get(result.get(j).getColumnName()));
+                            ps.setString(j+1, uploadData.get(result.get(j).getColumnName()));
                             break;
                         case "int":
+//
+////                            Integer.parsInt(String.valueof("변환 값"));
+//
+//                            ps.setInt(j+1, Integer.parseInt((String) uploadData.get(result.get(j).getColumnName())));
+////                            ps.setInt(j+1, (Integer) uploadData.get(result.get(j).getColumnName()));
+//                            break;
                         case "double" :
-                            log.debug("Double Casting : {}", (Double) uploadData.get(result.get(j).getColumnName()));
-                            ps.setDouble(j+1, (Double) uploadData.get(result.get(j).getColumnName()));
+                            log.debug("Double Casting : {}", Double.parseDouble(uploadData.get(result.get(j).getColumnName())) );
+                            ps.setDouble(j+1, Double.parseDouble(uploadData.get(result.get(j).getColumnName())));
+
+//                            ps.setDouble(j+1, Double.parseDouble((String) uploadData.get(result.get(j).getColumnName()))  );
                             break;
                         default:
-                            ps.setString(j+1, (String) uploadData.get(result.get(j).getColumnName()));
+                            ps.setString(j+1, uploadData.get(result.get(j).getColumnName()));
                             break;
                     }
                 }
