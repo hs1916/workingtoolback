@@ -28,6 +28,7 @@
 
 <body id="page-top">
 
+
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -74,17 +75,17 @@
                     <!-- Topbar Search -->
                     <!-- 이건 나중에 쓸모가 있을까봐 지우지 않음 -->
                     <!-- <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
+                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                    aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </form> -->
+                        </form> -->
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -95,25 +96,26 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="loginUserName">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="loginUserName">Douglas
+                                    McGee</span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <!-- <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div> -->
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Settings
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Activity Log
+                                    </a>
+                                    <div class="dropdown-divider"></div> -->
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -152,9 +154,9 @@
                         </ul>
                     </nav>
                     <!-- 
-                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank"
-                            href="https://datatables.net">official DataTables documentation</a>.</p> -->
+                        <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                            For more information about DataTables, please visit the <a target="_blank"
+                                href="https://datatables.net">official DataTables documentation</a>.</p> -->
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -189,8 +191,6 @@
 
             </div>
             <!-- End of Main Content -->
-
-
             <!-- Footer -->
             <div id="footer">
                 <!-- footer.html -->
@@ -247,12 +247,37 @@
 
     <script src="js/bs-custom-file-input.js"></script>
 
+    <!-- loading spinner -->
+    <script src="js/loadingoverlay.min.js"></script>
+
     <!-- custom javascript function -->
     <script src="js/api-use.js"></script>
+
+
 
     <script>
         let fileList = [];
         let strText;
+
+        function loadingbar() {
+            Loading();
+            setTimeout("closeLodingBar()", 3000);
+
+        }
+        function loadingBarOff() {
+            $.LoadingOverlay("hide");
+        }
+        function loadingBarShow() {
+            $.LoadingOverlay("show", {
+                background: "rgba(0, 0, 0, 0.5)",
+                image: "",
+                maxSize: 60,
+                fontawesome: "fa fa-spinner fa-pulse fa-fw",
+                fontawesomeColor: "#FFFFFF",
+            });
+
+            setTimeout("loadingBarOff()", 3000);
+        }
 
 
         $(document).ready(function () {
@@ -262,10 +287,10 @@
                 url: 'api/user',
                 method: 'GET'
             })
-            .done(function (json) {
-                $("#loginUserName").empty();
-                $("#loginUserName").text(json.username);
-            })
+                .done(function (json) {
+                    $("#loginUserName").empty();
+                    $("#loginUserName").text(json.username);
+                })
 
             $("#footer").load("footer.html");
 
@@ -274,15 +299,15 @@
                 method: 'GET',
                 dataType: 'json'
             })
-            .done(function (json) {
-                $.each(json, function (index, tableJson) {
-                    let name = tableJson['tableName'];
-                    let item = `<a class="dropdown-item" href="javascript:void(0)" onclick="select(this, 'selectedTable')">${name}</a>`;
-                    $("#tableDropDownList").append(item);
+                .done(function (json) {
+                    $.each(json, function (index, tableJson) {
+                        let name = tableJson['tableName'];
+                        let item = `<a class="dropdown-item" href="javascript:void(0)" onclick="select(this, 'selectedTable')">${name}</a>`;
+                        $("#tableDropDownList").append(item);
+                    })
+                    console.log(json);
                 })
-                console.log(json);
-            })
-                
+
 
 
             $('input[type="file"]').on("change", function (e) {
@@ -308,13 +333,13 @@
 
             $('#inputGroupFileAddon').on("click", function () {
                 let selectedTable = $("#selectedTable").val();
-                if ( !selectedTable ) {
+                if (!selectedTable) {
                     $("#uploadResult").html(composeAlert('warning', '파일업로드 경고', '테이블이 선택되지 않았습니다'));
-                    return false; 
+                    return false;
                 }
                 if (fileList.length == 0) {
                     $("#uploadResult").html(composeAlert('warning', '파일업로드 경고', '파일을 선택하지 않았습니다'));
-                    return false; 
+                    return false;
                 }
 
 
@@ -326,6 +351,9 @@
                 });
 
                 formData.append('tableName', selectedTable);
+
+                // lodingbar
+                loadingBarShow()
 
                 $.ajax({
                     url: 'file/upload',
@@ -342,7 +370,9 @@
                     .fail(function (err) {
                         console.log(err);
                         $("#uploadResult").html(composeAlert('danger', '파일업로드 실패', err.responseText));
-                      })
+                    })
+                formData = new FormData();
+                loadingBarOff();
             });
 
 

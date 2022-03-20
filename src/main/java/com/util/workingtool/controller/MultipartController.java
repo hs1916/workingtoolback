@@ -40,7 +40,5 @@ public class MultipartController {
             ResponseDTO<Map<Object, Object>> response = ResponseDTO.<Map<Object, Object>>builder().error(error).build();
             return ResponseEntity.badRequest().body(response);
         }
-
-
     }
 }
